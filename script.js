@@ -1,4 +1,5 @@
-const apiKey = '8d6454a89dff871786a0307b0dbebbee'
+const apiKey = '8d6454a89dff871786a0307b0dbebbee';
+
 async function fetchWeatherData(city) {
     try {
         const response = await fetch(
@@ -6,32 +7,16 @@ async function fetchWeatherData(city) {
         );
 
         if (!response.ok) {
-            throw new Error("Unable to fetch weather data");
+            throw new Error("Unable to fetch weather data. Check if the city name is correct or if the API key is valid.");
         }
+
         const data = await response.json();
-        console.log(data);
-        // console.log(data.main.temp);
-        // console.log(data.name);
-        // console.log(data.wind.speed);
-        // console.log(data.main.humidity);
-        // console.log(data.visibility);
+        console.log(data);  // Check data in the console
         updateWeatherUI(data);
     } catch (error) {
-        console.error(error);
+        console.error("Error:", error);
     }
 }
-
-const cityElement = document.querySelector(".city");
-const temperature = document.querySelector(".temp");
-const windSpeed = document.querySelector(".wind-speed");
-const humidity = document.querySelector(".humidity");
-const visibility = document.querySelector(".visibility-distance");
-
-const descriptionText = document.querySelector(".description-text");
-const date = document.querySelector(".date");
-const descriptionIcon = document.querySelector(".description i");
-
-// fetchWeatherData();
 
 function updateWeatherUI(data) {
     cityElement.textContent = data.name;
@@ -47,14 +32,10 @@ function updateWeatherUI(data) {
     descriptionIcon.innerHTML = `<i class="material-icons">${weatherIconName}</i>`;
 }
 
-const formElement = document.querySelector(".search-form");
-const inputElement = document.querySelector(".city-input");
-
 formElement.addEventListener("submit", function (e) {
     e.preventDefault();
-
-    const city = inputElement.value;
-    if (city !== "") {
+    const city = inputElement.value.trim();
+    if (city) {
         fetchWeatherData(city);
         inputElement.value = "";
     }
@@ -73,6 +54,5 @@ function getWeatherIconName(weatherCondition) {
         Haze: "cloud",
         Fog: "cloud",
     };
-
     return iconMap[weatherCondition] || "help";
 }
